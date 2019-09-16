@@ -164,9 +164,12 @@ namespace JKang.IpcServiceFramework
                 return null;
             }
 
-            MethodInfo method = null;     // disambiguate - can't just call as before with generics - MethodInfo method = service.GetType().GetMethod(request.MethodName);
-            var serviceMethods = service.GetType().GetMethods().Where(m => m.Name == request.MethodName);
+            MethodInfo method = null;
+            var types = service.GetType().GetInterfaces(); // Get all interfaces on the service
+            var allMethods = types.SelectMany(t => t.GetMethods()); // Get all methods on the interfaces
+            var serviceMethods = allMethods.Where(t => t.Name == request.MethodName).ToList();
 
+            // disambiguate by matching parameter types
             foreach (var serviceMethod in serviceMethods)
             {
                 var serviceMethodParameters = serviceMethod.GetParameters();
