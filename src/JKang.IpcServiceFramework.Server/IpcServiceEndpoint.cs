@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -58,7 +59,7 @@ namespace JKang.IpcServiceFramework
                     IpcResponse response;
                     using (IServiceScope scope = ServiceProvider.CreateScope())
                     {
-                        response = GetReponse(request, scope);
+                        response = await GetReponse(request, scope).ConfigureAwait(false);
                     }
 
                     cancellationToken.ThrowIfCancellationRequested();
@@ -71,11 +72,12 @@ namespace JKang.IpcServiceFramework
                 catch (Exception ex)
                 {
                     logger?.LogError(ex, ex.Message);
+                    await writer.WriteAsync(IpcResponse.Fail($"Internal server error: {ex.Message}"), cancellationToken).ConfigureAwait(false);
                 }
             }
         }
 
-        protected IpcResponse GetReponse(IpcRequest request, IServiceScope scope)
+        protected async Task<IpcResponse> GetReponse(IpcRequest request, IServiceScope scope)
         {
             object service = scope.ServiceProvider.GetService<TContract>();
             if (service == null)
@@ -83,7 +85,8 @@ namespace JKang.IpcServiceFramework
                 return IpcResponse.Fail($"No implementation of interface '{typeof(TContract).FullName}' found.");
             }
 
-            MethodInfo method = service.GetType().GetMethod(request.MethodName);
+            MethodInfo method = GetUnambiguousMethod(request, service);
+
             if (method == null)
             {
                 return IpcResponse.Fail($"Method '{request.MethodName}' not found in interface '{typeof(TContract).FullName}'.");
@@ -127,11 +130,15 @@ namespace JKang.IpcServiceFramework
                 {
                     method = method.MakeGenericMethod(request.GenericArguments);
                 }
-                
+
                 object @return = method.Invoke(service, args);
+
                 if (@return is Task)
                 {
-                    throw new NotImplementedException();
+                    await ((Task)@return).ConfigureAwait(false);
+
+                    var resultProperty = @return.GetType().GetProperty("Result");
+                    return IpcResponse.Success(resultProperty?.GetValue(@return));
                 }
                 else
                 {
@@ -142,6 +149,59 @@ namespace JKang.IpcServiceFramework
             {
                 return IpcResponse.Fail($"Internal server error: {ex.Message}");
             }
+        }
+
+        /// <summary>
+        /// Get the method that matches the requested signature
+        /// </summary>
+        /// <param name="request">The service call request</param>
+        /// <param name="service">The service</param>
+        /// <returns>The disambiguated service method</returns>
+        public static MethodInfo GetUnambiguousMethod(IpcRequest request, object service)
+        {
+            if (request == null || service == null)
+            {
+                return null;
+            }
+
+            MethodInfo method = null;
+            var types = service.GetType().GetInterfaces(); // Get all interfaces on the service
+            var allMethods = types.SelectMany(t => t.GetMethods()); // Get all methods on the interfaces
+            var serviceMethods = allMethods.Where(t => t.Name == request.MethodName).ToList();
+
+            // disambiguate by matching parameter types
+            foreach (var serviceMethod in serviceMethods)
+            {
+                var serviceMethodParameters = serviceMethod.GetParameters();
+                var parameterTypeMatches = 0;
+
+                if (serviceMethodParameters.Length == request.Parameters.Length && serviceMethod.GetGenericArguments().Length == request.GenericArguments.Length)
+                {
+                    for (int parameterIndex = 0; parameterIndex < serviceMethodParameters.Length; parameterIndex++)
+                    {
+                        Type serviceParameterType = serviceMethodParameters[parameterIndex].ParameterType.IsGenericParameter ?
+                                            request.GenericArguments[serviceMethodParameters[parameterIndex].ParameterType.GenericParameterPosition] :
+                                            serviceMethodParameters[parameterIndex].ParameterType;
+
+                        if (serviceParameterType == request.ParameterTypes[parameterIndex])
+                        {
+                            parameterTypeMatches++;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+
+                    if (parameterTypeMatches == serviceMethodParameters.Length)
+                    {
+                        method = serviceMethod;        // signatures match so assign
+                        break;
+                    }
+                }
+            }
+
+            return method;
         }
     }
 }

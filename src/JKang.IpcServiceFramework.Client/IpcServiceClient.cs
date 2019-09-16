@@ -3,6 +3,7 @@ using JKang.IpcServiceFramework.IO;
 using JKang.IpcServiceFramework.Services;
 using System;
 using System.IO;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -28,7 +29,7 @@ namespace JKang.IpcServiceFramework
             CancellationToken cancellationToken = default(CancellationToken))
         {
             IpcRequest request = GetRequest(exp, new MyInterceptor());
-            IpcResponse response = await GetResponseAsync(request, cancellationToken);
+            IpcResponse response = await GetResponseAsync(request, cancellationToken).ConfigureAwait(false);
 
             if (response.Succeed)
             {
@@ -44,7 +45,7 @@ namespace JKang.IpcServiceFramework
             CancellationToken cancellationToken = default(CancellationToken))
         {
             IpcRequest request = GetRequest(exp, new MyInterceptor<TResult>());
-            IpcResponse response = await GetResponseAsync(request, cancellationToken);
+            IpcResponse response = await GetResponseAsync(request, cancellationToken).ConfigureAwait(false);
 
             if (response.Succeed)
             {
@@ -62,6 +63,46 @@ namespace JKang.IpcServiceFramework
                 throw new InvalidOperationException(response.Failure);
             }
         }
+
+        public async Task InvokeAsync(Expression<Func<TInterface, Task>> exp,
+            CancellationToken cancellationToken = default(CancellationToken))
+        {
+            IpcRequest request = GetRequest(exp, new MyInterceptor<Task>());
+            IpcResponse response = await GetResponseAsync(request, cancellationToken).ConfigureAwait(false);
+
+            if (response.Succeed)
+            {
+                return;
+            }
+            else
+            {
+                throw new InvalidOperationException(response.Failure);
+            }
+        }
+
+        public async Task<TResult> InvokeAsync<TResult>(Expression<Func<TInterface, Task<TResult>>> exp,
+            CancellationToken cancellationToken = default(CancellationToken))
+        {
+            IpcRequest request = GetRequest(exp, new MyInterceptor<Task<TResult>>());
+            IpcResponse response = await GetResponseAsync(request, cancellationToken).ConfigureAwait(false);
+
+            if (response.Succeed)
+            {
+                if (_converter.TryConvert(response.Data, typeof(TResult), out object @return))
+                {
+                    return (TResult)@return;
+                }
+                else
+                {
+                    throw new InvalidOperationException($"Unable to convert returned value to '{typeof(TResult).Name}'.");
+                }
+            }
+            else
+            {
+                throw new InvalidOperationException(response.Failure);
+            }
+        }
+
 
         private static IpcRequest GetRequest(Expression exp, MyInterceptor interceptor)
         {
@@ -83,6 +124,12 @@ namespace JKang.IpcServiceFramework
             {
                 MethodName = interceptor.LastInvocation.Method.Name,
                 Parameters = interceptor.LastInvocation.Arguments,
+
+                ParameterTypes = interceptor.LastInvocation.Method.GetParameters()
+                              .Select(p => p.ParameterType)
+                              .ToArray(),
+
+
                 GenericArguments = interceptor.LastInvocation.GenericArguments,
             };
         }
@@ -91,7 +138,7 @@ namespace JKang.IpcServiceFramework
 
         private async Task<IpcResponse> GetResponseAsync(IpcRequest request, CancellationToken cancellationToken)
         {
-            using (Stream client = await ConnectToServerAsync(cancellationToken))
+            using (Stream client = await ConnectToServerAsync(cancellationToken).ConfigureAwait(false))
             using (var writer = new IpcWriter(client, _serializer, leaveOpen: true))
             using (var reader = new IpcReader(client, _serializer, leaveOpen: true))
             {
