@@ -8,4 +8,4 @@ script:
  - cd ./src
  - dotnet restore
  - dotnet build --configuration Release
- - dotnet test JKang.IpcServiceFramework.Core.Tests
+ - dotnet test IpcServiceFramework.Core.Tests

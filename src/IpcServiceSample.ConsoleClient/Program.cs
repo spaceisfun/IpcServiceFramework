@@ -1,6 +1,6 @@
 ﻿using IpcServiceSample.ServiceContracts;
 using IpcServiceSample.ServiceContracts.Helpers;
-using JKang.IpcServiceFramework;
+using IpcServiceFramework;
 using System;
 using System.Net;
 using System.Net.Security;

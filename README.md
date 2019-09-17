@@ -1,5 +1,3 @@
-[![Build Status](https://travis-ci.org/jacqueskang/IpcServiceFramework.svg?branch=develop)](https://travis-ci.org/jacqueskang/IpcServiceFramework)
-
 # IpcServiceFramework
 
 A .NET Core lightweight inter-process communication framework allowing invoking a service via named pipeline and/or TCP (in a similar way as WCF, which is currently unavailable for .NET Core). Secure communication over SSL is also supported.
@@ -10,6 +8,8 @@ Support multi-threading on server side with configurable number of threads (name
 
 [ASP.NET Core Dependency Injection framework](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection) friendly.
 
+Forked from https://github.com/jacqueskang/IpcServiceFramework
+
 ## Usage
  1. Create an interface as service contract and package it in an assembly to be shared between server and client.
  2. Implement the service and host it in an console or web applciation.
@@ -19,8 +19,8 @@ Support multi-threading on server side with configurable number of threads (name
 
 IpcServiceFramework is available via NuGet:
 
- - [JKang.IpcServiceFramework.Server](https://www.nuget.org/packages/JKang.IpcServiceFramework.Server/)
- - [JKang.IpcServiceFramework.Client](https://www.nuget.org/packages/JKang.IpcServiceFramework.Client/)
+ - [IpcServiceFramework.Server](https://www.nuget.org/packages/IpcServiceFramework.Server/)
+ - [IpcServiceFramework.Client](https://www.nuget.org/packages/IpcServiceFramework.Client/)
 
 ## Quick Start:
 
@@ -39,7 +39,7 @@ _Note: This interface is ideally to be placed in a library assembly to be shared
 
 ```
 > Install-Package Microsoft.Extensions.DependencyInjection
-> Install-Package JKang.IpcServiceFramework.Server
+> Install-Package IpcServiceFramework.Server
 ```
 
 2. Add an class that implements the service contract
@@ -93,7 +93,7 @@ _Note: It's possible to host IPC service in web application, please check out th
 
 1. Install the following package in client application:
 ```bash
-$ dotnet add package JKang.IpcServiceFramework.Client
+$ dotnet add package IpcServiceFramework.Client
 ```
 
 2. Add reference to the assembly created in step 1 which contains `IComputingService` interface.

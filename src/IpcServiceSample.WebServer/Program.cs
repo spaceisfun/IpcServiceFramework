@@ -1,5 +1,5 @@
 ﻿using IpcServiceSample.ServiceContracts;
-using JKang.IpcServiceFramework;
+using IpcServiceFramework;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;

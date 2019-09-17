@@ -1,6 +1,6 @@
 ﻿using IpcServiceSample.ConsoleServer;
 using IpcServiceSample.ServiceContracts;
-using JKang.IpcServiceFramework;
+using IpcServiceFramework;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;

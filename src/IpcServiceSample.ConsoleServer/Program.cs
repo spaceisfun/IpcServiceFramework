@@ -1,6 +1,6 @@
 ﻿using IpcServiceSample.ServiceContracts;
 using IpcServiceSample.ServiceContracts.Helpers;
-using JKang.IpcServiceFramework;
+using IpcServiceFramework;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;

@@ -1,11 +1,11 @@
 <Project>
 
   <PropertyGroup>
-    <Authors>Jacques Kang and other GitHub contributors</Authors>
+    <Authors>Jake Friedman, Jacques Kang, and other GitHub contributors</Authors>
     <Company />
-    <PackageLicenseUrl>https://github.com/jacqueskang/IpcServiceFramework/blob/develop/LICENSE</PackageLicenseUrl>
-    <RepositoryUrl>https://github.com/jacqueskang/IpcServiceFramework</RepositoryUrl>
-    <PackageTags>dotnetcore,named-pipes,interprocess-communication</PackageTags>
+    <PackageLicenseUrl>https://github.com/spaceisfun/IpcServiceFramework/blob/develop/LICENSE</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/spaceisfun/IpcServiceFramework</RepositoryUrl>
+    <PackageTags>dotnetcore,named-pipes,interprocess-communication,ipc</PackageTags>
     <PackageProjectUrl>https://github.com/jacqueskang/IpcServiceFramework</PackageProjectUrl>
     <!-- this version will be overwritten during build -->
     <Version>0.0.0</Version>

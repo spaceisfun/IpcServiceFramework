@@ -19,17 +19,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JKang.IpcServiceFramework.Client", "JKang.IpcServiceFramework.Client\JKang.IpcServiceFramework.Client.csproj", "{13D724CA-3FEA-49E1-BB6B-365CF9397986}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IpcServiceFramework.Client", "IpcServiceFramework.Client\IpcServiceFramework.Client.csproj", "{13D724CA-3FEA-49E1-BB6B-365CF9397986}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JKang.IpcServiceFramework.Core", "JKang.IpcServiceFramework.Core\JKang.IpcServiceFramework.Core.csproj", "{58200319-1F71-4E22-894D-7E69E0CD0B57}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IpcServiceFramework.Core", "IpcServiceFramework.Core\IpcServiceFramework.Core.csproj", "{58200319-1F71-4E22-894D-7E69E0CD0B57}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JKang.IpcServiceFramework.Server", "JKang.IpcServiceFramework.Server\JKang.IpcServiceFramework.Server.csproj", "{069B416A-B2C6-40D1-80B8-AC9ACA2217E3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IpcServiceFramework.Server", "IpcServiceFramework.Server\IpcServiceFramework.Server.csproj", "{069B416A-B2C6-40D1-80B8-AC9ACA2217E3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JKang.IpcServiceFramework.Core.Tests", "JKang.IpcServiceFramework.Core.Tests\JKang.IpcServiceFramework.Core.Tests.csproj", "{1EC81913-883B-487C-A3FD-98A80EDE3225}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IpcServiceFramework.Core.Tests", "IpcServiceFramework.Core.Tests\IpcServiceFramework.Core.Tests.csproj", "{1EC81913-883B-487C-A3FD-98A80EDE3225}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IpcServiceSample.WebServer", "IpcServiceSample.WebServer\IpcServiceSample.WebServer.csproj", "{D57727B9-81F1-439A-AD17-0DB26C8F0523}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JKang.IpcServiceFramework.IntegrationTests", "JKang.IpcServiceFramework.IntegrationTests\JKang.IpcServiceFramework.IntegrationTests.csproj", "{451DE9A3-7A34-487B-823C-FB3C6B6EF20D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IpcServiceFramework.IntegrationTests", "IpcServiceFramework.IntegrationTests\IpcServiceFramework.IntegrationTests.csproj", "{451DE9A3-7A34-487B-823C-FB3C6B6EF20D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

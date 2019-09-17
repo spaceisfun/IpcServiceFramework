@@ -7,7 +7,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\IpcServiceSample.ServiceContracts\IpcServiceSample.ServiceContracts.csproj" />
-    <ProjectReference Include="..\JKang.IpcServiceFramework.Client\JKang.IpcServiceFramework.Client.csproj" />
+    <ProjectReference Include="..\IpcServiceFramework.Client\IpcServiceFramework.Client.csproj" />
   </ItemGroup>
   
 </Project>
